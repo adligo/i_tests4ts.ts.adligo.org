@@ -111,7 +111,7 @@ export interface I_Trial extends I_Named {
 
     getType(): TrialType;
 
-    run(testResultFactor: I_TestResultFactory): I_Runnable;
+    run(testResultFactory: I_TestResultFactory): I_Runnable;
 }
 
 export enum TrialType {
