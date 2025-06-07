@@ -1,0 +1,20 @@
+{
+  "bugs": {
+    "url": "https://github.com/adligo/tests4ts.ts.adligo.org/issues"
+  },
+  "dependencies": {
+    "npm": "^11.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.0.4"
+  },
+  "license": "Apache-2.0",
+  "lockfileVersion": 3,
+  "name": "@ts.adligo.org/i_tests4ts",
+  "sharedNodeModuleProjectSLinkEnvVar": ["TESTS4TS_NODE_MODULE_SLINK"],
+  "sharedNodeModuleProjectSLinks": ["slink_group_deps.ts.adligo.org", "fab_group_deps.ts.adligo.org"],
+  "type": "module",
+  "types": "src/i_tests4ts.mts",
+  "version": "0.0.1"
+}
