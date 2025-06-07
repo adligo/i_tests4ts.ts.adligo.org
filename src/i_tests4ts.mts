@@ -26,6 +26,8 @@ import {I_Named, I_String} from '@ts.adligo.org/i_strings/src/i_strings.mjs';
 export interface I_AssertionContext {
     equals(expected: any, actual: any, message?: string): void;
 
+    getCount(): number;
+
     isFalse(check: boolean, message?: string): void;
 
     isTrue(check: boolean, message?: string): void;
