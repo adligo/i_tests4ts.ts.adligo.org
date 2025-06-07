@@ -12,9 +12,13 @@
   "license": "Apache-2.0",
   "lockfileVersion": 3,
   "name": "@ts.adligo.org/i_tests4ts",
+  "scripts": {
+    "build": "tsc",
+    "tsc": "tsc"
+  },
   "sharedNodeModuleProjectSLinkEnvVar": ["TESTS4TS_NODE_MODULE_SLINK"],
   "sharedNodeModuleProjectSLinks": ["slink_group_deps.ts.adligo.org", "fab_group_deps.ts.adligo.org"],
   "type": "module",
   "types": "src/i_tests4ts.mts",
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

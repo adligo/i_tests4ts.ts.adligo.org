@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {I_Out} from '../../i_io.ts.adligo.org/src/i_io.mjs';
-import {I_Classifiable, I_Equatable} from '../../i_obj.ts.adligo.org/src/i_obj.mjs';
-import {I_Named, I_String} from '../../i_strings.ts.adligo.org/src/i_strings.mjs';
+import {I_Out} from '@ts.adligo.org/i_io/src/i_io.mjs';
+import {I_Classifiable, I_Equatable} from '@ts.adligo.org/i_obj/src/i_obj.mjs';
+import {I_Named, I_String} from '@ts.adligo.org/i_strings/src/i_strings.mjs';
 
 /**
  * This is the basic assertion
