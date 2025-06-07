@@ -16,107 +16,113 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {I_Out} from '@ts.adligo.org/i_io/src/i_io.mjs';
-import {I_Classifiable, I_Equatable} from '@ts.adligo.org/i_obj/src/i_obj.mjs';
-import {I_Named, I_String} from '@ts.adligo.org/i_strings/src/i_strings.mjs';
+import { I_Out } from '@ts.adligo.org/i_io/src/i_io.mjs';
+import { I_Classifiable, I_Equatable } from '@ts.adligo.org/i_obj/src/i_obj.mjs';
+import { I_Named, I_String } from '@ts.adligo.org/i_strings/src/i_strings.mjs';
 
 /**
  * This is the basic assertion
  */
 export interface I_AssertionContext {
-    equals(expected: any, actual: any, message?: string): void;
+  equals(expected: any, actual: any, message?: string): void;
 
-    getCount(): number;
+  getCount(): number;
 
-    isFalse(check: boolean, message?: string): void;
+  isFalse(check: boolean, message?: string): void;
 
-    isTrue(check: boolean, message?: string): void;
+  isTrue(check: boolean, message?: string): void;
 
-    notEquals(expected: I_Equatable, actual: any, message?: string): void;
+  notEquals(expected: I_Equatable, actual: any, message?: string): void;
 
-    notSame(expected: string, actual: string, message?: string): void;
+  notSame(expected: string, actual: string, message?: string): void;
 
-    same(expected: string, actual: string, message?: string): void;
+  same(expected: string, actual: string, message?: string): void;
 
-    /**
-     *
-     * @param error the error and it's causes to match up against,
-     *   matching .name, .message, and the susequent .cause's .names and .messages.
-     * @param runner
-     * @param message
-     */
-    thrown(error: Error, runner: I_Runnable, message?: string): void;
+  /**
+   *
+   * @param error the error and it's causes to match up against,
+   *   matching .name, .message, and the susequent .cause's .names and .messages.
+   * @param runner
+   * @param message
+   */
+  thrown(error: Error, runner: I_Runnable, message?: string): void;
 }
 
 export interface I_AssertionContextFactory {
-    newAssertionContext(): I_AssertionContext;
+  newAssertionContext(): I_AssertionContext;
 }
 
 /**
  * To see how-to / usage go to https://github.com/adligo/tests4j.ts.adligo.org
  */
-export type I_AssertionContextConsumer = (ac : I_AssertionContext) => void;
+export type I_AssertionContextConsumer = (ac: I_AssertionContext) => void;
 
 export interface I_AssertionContextResult extends I_Classifiable {
-    getCount(): number;
+  getCount(): number;
 }
 
 /**
  * Converts a Trial's Results into a string that can be that can be written as a file
  */
 export interface I_FileConverter {
-    convert(trial: I_Trial): string;
+  convert(trial: I_Trial): string;
 
-    /**
-     * the extension of the file name i.e. 'xml'
-     */
-    getFileNameExtension(): string;
+  /**
+   * the extension of the file name i.e. 'xml'
+   */
+  getFileNameExtension(): string;
 }
 
 export type I_Runnable = () => void;
 
 export interface I_Test extends I_Named {
-    ignore(): I_Test;
+  ignore(): I_Test;
 
-    isIgnored(): any;
+  isIgnored(): any;
 
-    run(assertionCtx: I_AssertionContext): void;
+  run(assertionCtx: I_AssertionContext): void;
 }
 
 export interface I_TestResult {
-    isPass(): boolean;
+  /**
+   * this will likely read c8 code coverage from json files
+   * after the TrialSuite is completed running.
+   */
+  collectCoverage();
 
-    getAssertionCount(): number;
+  isPass(): boolean;
 
-    getErrorMessage(): string;
+  getAssertionCount(): number;
 
-    getName(): string;
+  getErrorMessage(): string;
+
+  getName(): string;
 }
 
 export interface I_TestResultFactory {
-    newTestResult(assertionCount: number, test: I_Test): I_TestResult;
-    newTestResultFailure(assertionCount: number, test: I_Test, errorMessage: string): I_TestResult;
+  newTestResult(assertionCount: number, test: I_Test): I_TestResult;
+  newTestResultFailure(assertionCount: number, test: I_Test, errorMessage: string): I_TestResult;
 }
 
 export interface I_Trial extends I_Named {
-    getAssertionCount(): number;
+  getAssertionCount(): number;
 
-    getFailureCount(): number;
+  getFailureCount(): number;
 
-    getIgnored(): any;
+  getIgnored(): any;
 
-    getTestCount(): number;
+  getTestCount(): number;
 
-    getTest(testName: string): I_Test;
+  getTest(testName: string): I_Test;
 
-    getTestResults(): I_TestResult[];
+  getTestResults(): I_TestResult[];
 
-    getType(): TrialType;
+  getType(): TrialType;
 
-    run(assertionCtxFactory: I_AssertionContextFactory, testResultFactory: I_TestResultFactory): I_Runnable;
+  run(assertionCtxFactory: I_AssertionContextFactory, testResultFactory: I_TestResultFactory): I_Runnable;
 }
 
 export enum TrialType {
-    ApiTrial,
-    SourceFileTrial
+  ApiTrial,
+  SourceFileTrial
 }
