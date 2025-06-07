@@ -47,7 +47,7 @@ export interface I_AssertionContext {
 }
 
 export interface I_AssertionContextFactory {
-    newAssertionContextFactory(): I_AssertionContext;
+    newAssertionContext(): I_AssertionContext;
 }
 
 /**
