@@ -90,7 +90,7 @@ export interface I_TestResult {
    * this will likely read c8 code coverage from json files
    * after the TrialSuite is completed running.
    */
-  collectCoverage();
+  collectCoverage(): void;
 
   isPass(): boolean;
 
