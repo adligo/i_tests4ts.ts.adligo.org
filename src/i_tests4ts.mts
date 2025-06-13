@@ -24,9 +24,12 @@ import { I_Named, I_String } from '@ts.adligo.org/i_strings/dist/i_strings.mjs';
  * This is the basic assertion
  */
 export interface I_AssertionContext {
+  /**
+   * 
+   */
   error(expected: string, runnable: () => void): void;
   
-  equals(expected: any, actual: any, message?: string): void;
+  equals(expected: I_Equatable | any, actual: any, message?: string): void;
 
   getCount(): number;
 
@@ -34,11 +37,16 @@ export interface I_AssertionContext {
 
   isTrue(check: boolean, message?: string): void;
 
-  notEquals(expected: I_Equatable, actual: any, message?: string): void;
+  notEquals(expected: I_Equatable | any, actual: any, message?: string): void;
 
-  notSame(expected: string, actual: string, message?: string): void;
+  /**
+   * This is the same for notUndefiend 
+   */
+  notNull(expected: any, message?: string): void;
+  
+  notSame(expected: any, actual: any, message?: string): void;
 
-  same(expected: string, actual: string, message?: string): void;
+  same(expected: any, actual: any, message?: string): void;
 
   /**
    *
