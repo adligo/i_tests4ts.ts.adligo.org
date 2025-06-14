@@ -16,9 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { I_Out } from '@ts.adligo.org/i_io/dist/i_io.mjs';
 import { I_Classifiable, I_Equatable } from '@ts.adligo.org/i_obj/dist/i_obj.mjs';
 import { I_Named, I_String } from '@ts.adligo.org/i_strings/dist/i_strings.mjs';
+
+/**
+ * represts something that has a equals method and a toString method
+ * if these are misssing == and != are used for equality
+ * and '' + yourObj are used for toString logic
+ */
+export interface I_EquatableString extends I_Equatable, I_String {}
 
 /**
  * This is the basic assertion
@@ -29,7 +35,7 @@ export interface I_AssertionContext {
    */
   error(expected: string, runnable: () => void): void;
   
-  equals(expected: I_Equatable | any, actual: any, message?: string): void;
+  equals(expected: I_EquatableString | I_Equatable | I_String | string | any, actual: I_String | string | any, message?: string): void;
 
   getCount(): number;
 
@@ -37,25 +43,25 @@ export interface I_AssertionContext {
 
   isTrue(check: boolean, message?: string): void;
 
-  notEquals(expected: I_Equatable | any, actual: any, message?: string): void;
+  notEquals(expected: I_EquatableString | I_Equatable | I_String | string | any, actual: I_String | string | any, message?: string): void;
 
   /**
    * This is the same for notUndefiend 
    */
-  notNull(expected: any, message?: string): void;
+  notNull(expected: I_String | string | any, message?: string): void;
   
-  notSame(expected: any, actual: any, message?: string): void;
+  notSame(expected: I_String | string | any,  actual: I_String | string | any, message?: string): void;
 
-  same(expected: any, actual: any, message?: string): void;
+  same(expected: I_String | string | any, actual: I_String | string | any, message?: string): void;
 
   /**
    *
-   * @param error the error and it's causes to match up against,
+   * @param expected the expected error and it's causes to match up against,
    *   matching .name, .message, and the susequent .cause's .names and .messages.
    * @param runner
    * @param message
    */
-  thrown(error: Error, runner: I_Runnable, message?: string): void;
+  thrown(expected: Error, runner: I_Runnable, message?: string): void;
 }
 
 export interface I_AssertionContextFactory {
