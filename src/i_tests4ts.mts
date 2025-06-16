@@ -20,6 +20,46 @@ import { I_Classifiable, I_Equatable } from '@ts.adligo.org/i_obj/dist/i_obj.mjs
 import { I_Named, I_String } from '@ts.adligo.org/i_strings/dist/i_strings.mjs';
 
 /**
+ * This is for the equals and notEquals logic, so we can have a
+ * I_ComparisionNode result for equals to see where something was notEquals
+ * without throwing a exception.  I'm trying to seperate concerns here
+ * so the notEquals logic can use the equals logic in an elegant mannor.
+ */
+export enum ComparisionNodeType {
+  Array,
+  Map,
+  Object,
+  /**
+   * includes boolean, undefined, null, NaN, number and string
+   */
+  Primitive,
+  Set
+}
+
+export enum ComparisonNodeInfoType {
+  /**
+   * Indicates a I_ComparisionArrayInfo
+   */
+  Array,
+  /**
+   * Indicates a I_ComparisionCollectionSizeInfo
+   */
+  CollectionSize,
+  /**
+   * Indicates a I_ComparisionMapValueInfo
+   */
+  MapValue, 
+  /**
+   * Indicates a I_ComparisionSetInfo
+   */
+  Set,
+  /**
+   * Indicates a I_ComparisionTypeInfo
+   */
+  Type
+}
+
+/**
  * represts something that has a equals method and a toString method
  * if these are misssing == and != are used for equality
  * and '' + yourObj are used for toString logic
@@ -76,6 +116,57 @@ export type I_AssertionContextConsumer = (ac: I_AssertionContext) => void;
 export interface I_AssertionContextResult extends I_Classifiable {
   getCount(): number;
 }
+
+export interface I_ComparisionNode {
+  getActual(): any;
+  getAssertionCount(): number;
+  getExpected(): any;
+  getType(): ComparisionNodeType;
+  hasInfo(): boolean;
+  getInfo(): I_ComparisionBaseInfo;
+
+  hasNext(): boolean;
+  getNext(): I_ComparisionNode;
+}
+
+export interface I_ComparisionBaseInfo {
+  getInfoType(): ComparisonNodeInfoType;
+}
+
+export interface I_ComparisionArrayInfo extends I_ComparisionBaseInfo {
+  getIndex(): number;
+}
+
+export interface I_ComparisionCollectionSizeInfo extends I_ComparisionBaseInfo {
+  getActualSize(): number;
+  getExpectedSize(): number;
+}
+
+export interface I_ComparisionMapValueInfo extends I_ComparisionBaseInfo {
+  getKey(): any;
+  getActualValue(): any;
+  getExpectedValue(): any;
+}
+
+/**
+ * Note this is for Sets as well as Map keys
+ */
+export interface I_ComparisionSetInfo extends I_ComparisionBaseInfo {
+  getMissingActuals(): Set<any>;
+  getMissingExpected(): Set<any>;
+  isMapKeys(): boolean;
+}
+
+/**
+ * Note this is for Array.isArray Maps.isMap etc
+ * the type should be a class or type name i.e. boolean, Array, string, Map, Set, Object, number
+ */
+export interface I_ComparisionTypeInfo extends I_ComparisionBaseInfo {
+  getActualType(): TypeName;
+  getExpectedType(): TypeName;
+  isMapKeys(): boolean;
+}
+
 
 /**
  * Converts a Trial's Results into a string that can be that can be written as a file
@@ -141,4 +232,14 @@ export interface I_Trial extends I_Named {
 export enum TrialType {
   ApiTrial,
   SourceFileTrial
+}
+
+export enum TypeName {
+  Array,
+  Boolean,
+  Map,
+  Number,
+  Object, 
+  Set, 
+  String, 
 }
