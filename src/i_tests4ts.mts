@@ -18,53 +18,7 @@
  */
 import { I_Classifiable, I_Equatable } from '@ts.adligo.org/i_obj/dist/i_obj.mjs';
 import { I_Named, I_String } from '@ts.adligo.org/i_strings/dist/i_strings.mjs';
-
-/**
- * This is for the equals and notEquals logic, so we can have a
- * I_ComparisionNode result for equals to see where something was notEquals
- * without throwing a exception.  I'm trying to seperate concerns here
- * so the notEquals logic can use the equals logic in an elegant mannor.
- */
-export enum ComparisionNodeType {
-  Array,
-  Map,
-  Object,
-  /**
-   * includes boolean, undefined, null, NaN, number and string
-   */
-  Primitive,
-  Set
-}
-
-export enum ComparisonNodeInfoType {
-  /**
-   * Indicates a I_ComparisionArrayInfo
-   */
-  Array,
-  /**
-   * Indicates a I_ComparisionCollectionSizeInfo
-   */
-  CollectionSize,
-  /**
-   * Indicates a I_ComparisionMapValueInfo
-   */
-  MapValue, 
-  /**
-   * Indicates a I_ComparisionSetInfo
-   */
-  Set,
-  /**
-   * Indicates a I_ComparisionTypeInfo
-   */
-  Type
-}
-
-/**
- * represts something that has a equals method and a toString method
- * if these are misssing == and != are used for equality
- * and '' + yourObj are used for toString logic
- */
-export interface I_EquatableString extends I_Equatable, I_String {}
+import { ComparisionNodeType, ComparisonNodeInfoType, TrialType, TypeName } from '@ts.adligo.org/i_tests4ts_types/dist/i_tests4ts_types.mjs'
 
 /**
  * This is the basic assertion
@@ -169,6 +123,16 @@ export interface I_ComparisionTypeInfo extends I_ComparisionBaseInfo {
 
 
 /**
+ * represts something that has a equals method and a toString method
+ * if these are misssing == and != are used for equality
+ * and '' + yourObj are used for toString logic
+ */
+export interface I_EquatableString extends I_Equatable, I_String {}
+
+export interface I_Eval {
+  eval(javaScript: string);
+}
+/**
  * Converts a Trial's Results into a string that can be that can be written as a file
  */
 export interface I_FileConverter {
@@ -190,6 +154,46 @@ export interface I_Test extends I_Named {
   run(assertionCtx: I_AssertionContext): void;
 }
 
+export interface I_TestFactory {
+  getTests(params: I_TestFactoryParams, trial: I_Trial): I_Test[];
+}
+
+export interface I_TestFactoryParams {
+  /**
+   * defaults to an array with the Trial instance in it,
+   * however this can be split up to multiple classes / files
+   * like the AssertionsTrial has.
+   */
+  getInstancesWithTestMethods(): any[];
+  /**
+   * defaults to 'test'
+   */
+  getTestNamePrefix(): string;
+
+  /**
+   * defaults to 'Ignored'
+   */
+  getTestIgnoredSuffix(): string;
+}
+
+export interface I_TestParams {
+  /**
+   * the test name
+   */
+  getName();
+  
+  /** 
+   * This is now the preferred way to run the test
+   * and the lambda in the TestConstructor will be @depricated and eventually removed
+   */
+  getTestRunner(): I_TestRunner;
+
+  /**
+   * if the test is ignored
+   */
+  isIgnored();
+}
+
 export interface I_TestResult {
   /**
    * this will likely read c8 code coverage from json files
@@ -206,12 +210,32 @@ export interface I_TestResult {
   getName(): string;
 }
 
+/** 
+ * This will basically wrap the eval so I can 
+ * move back to instance methods like other test runners
+ */
+export interface I_TestRunner {
+
+  run(assertionCtx: I_AssertionContext): void;
+}
+
 export interface I_TestResultFactory {
   newTestResult(assertionCount: number, test: I_Test): I_TestResult;
   newTestResultFailure(assertionCount: number, test: I_Test, errorMessage: string): I_TestResult;
 }
 
+export interface I_TestParamsFactory {
+  getTestParams(testName: string): I_TestParams;
+}
+
 export interface I_Trial extends I_Named {
+  /**
+   * this discovers the tests, as the Trial instance needs to be
+   * created before we call Object.getKeys on it to discover the test and testIgnored
+   * methods.
+   */
+  createTests(): I_Trial;
+
   getAssertionCount(): number;
 
   getFailureCount(): number;
@@ -229,17 +253,9 @@ export interface I_Trial extends I_Named {
   run(assertionCtxFactory: I_AssertionContextFactory, testResultFactory: I_TestResultFactory): I_Runnable;
 }
 
-export enum TrialType {
-  ApiTrial,
-  SourceFileTrial
+export interface I_TrialParams extends I_Named {
+  getTrialName(): string;
+  getTestFactory(): I_TestFactory;
+  getTestFactoryParams(): I_TestFactoryParams;
 }
 
-export enum TypeName {
-  Array,
-  Boolean,
-  Map,
-  Number,
-  Object, 
-  Set, 
-  String, 
-}
