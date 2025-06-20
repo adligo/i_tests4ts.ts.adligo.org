@@ -118,7 +118,6 @@ export interface I_ComparisionSetInfo extends I_ComparisionBaseInfo {
 export interface I_ComparisionTypeInfo extends I_ComparisionBaseInfo {
   getActualType(): TypeName;
   getExpectedType(): TypeName;
-  isMapKeys(): boolean;
 }
 
 
