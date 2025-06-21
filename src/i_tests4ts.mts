@@ -134,8 +134,15 @@ export interface I_ComparisionTypeInfo extends I_ComparisionBaseInfo {
  */
 export interface I_EquatableString extends I_Equatable, I_String {}
 
+/** 
+ * @deprecated use I_FunctionFactory
+ */
 export interface I_Eval {
   eval(javaScript: string);
+}
+
+export interface I_FunctionFactory {
+  newFun(...params: string[]): Function;
 }
 /**
  * Converts a Trial's Results into a string that can be that can be written as a file
