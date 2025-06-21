@@ -71,21 +71,22 @@ export interface I_AssertionContextResult extends I_Classifiable {
   getCount(): number;
 }
 
-export interface I_ComparisionNode {
-  getActual(): any;
+export interface I_ComparisionNode extends I_ComparisionEqualInfo {
   getAssertionCount(): number;
-  getExpected(): any;
-  getType(): ComparisionNodeType;
-  hasInfo(): boolean;
-  getInfo(): I_ComparisionBaseInfo;
-
-  hasNext(): boolean;
-  getNext(): I_ComparisionNode;
+  hasChildInfo(): boolean;
+  /** 
+   * The child info is basically the failue stack
+   * so you can trace back through which collection failed
+   * with which key or index
+   */
+  getChildInfo(idx: number): I_ComparisionBaseInfo;
+  getChildInfoSize(): number;
 }
 
 export interface I_ComparisionBaseInfo {
   getInfoType(): ComparisonNodeInfoType;
 }
+
 
 export interface I_ComparisionArrayInfo extends I_ComparisionBaseInfo {
   getIndex(): number;
@@ -94,6 +95,11 @@ export interface I_ComparisionArrayInfo extends I_ComparisionBaseInfo {
 export interface I_ComparisionCollectionSizeInfo extends I_ComparisionBaseInfo {
   getActualSize(): number;
   getExpectedSize(): number;
+}
+
+export interface I_ComparisionEqualInfo extends I_ComparisionBaseInfo {
+  getActual(): any;
+  getExpected(): any;
 }
 
 export interface I_ComparisionMapValueInfo extends I_ComparisionBaseInfo {
