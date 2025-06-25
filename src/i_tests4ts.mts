@@ -71,7 +71,7 @@ export interface I_AssertionContextResult extends I_Classifiable {
   getCount(): number;
 }
 
-export interface I_ComparisionNode extends I_ComparisionEqualInfo {
+export interface I_ComparisionNode extends I_ComparisionBaseEquals  {
   getAssertionCount(): number;
   hasChildInfo(): boolean;
   /** 
@@ -87,6 +87,10 @@ export interface I_ComparisionBaseInfo {
   getInfoType(): ComparisonNodeInfoType;
 }
 
+export interface I_ComparisionBaseEquals {
+  getActual(): any;
+  getExpected(): any;
+}
 
 export interface I_ComparisionArrayInfo extends I_ComparisionBaseInfo {
   getIndex(): number;
@@ -97,9 +101,8 @@ export interface I_ComparisionCollectionSizeInfo extends I_ComparisionBaseInfo {
   getExpectedSize(): number;
 }
 
-export interface I_ComparisionEqualInfo extends I_ComparisionBaseInfo {
-  getActual(): any;
-  getExpected(): any;
+export interface I_ComparisionEqualInfo extends I_ComparisionBaseEquals, I_ComparisionBaseInfo {
+
 }
 
 export interface I_ComparisionMapValueInfo extends I_ComparisionBaseInfo {
