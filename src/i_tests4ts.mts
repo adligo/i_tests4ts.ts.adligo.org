@@ -28,7 +28,7 @@ export interface I_AssertionContext {
    * 
    */
   error(expected: string, runnable: () => void): void;
-  
+
   equals(expected: I_EquatableString | I_Equatable | I_String | string | any, actual: I_String | string | any, message?: string): void;
 
   getCount(): number;
@@ -43,8 +43,8 @@ export interface I_AssertionContext {
    * This is the same for notUndefiend 
    */
   notNull(expected: I_String | string | any, message?: string): void;
-  
-  notSame(expected: I_String | string | any,  actual: I_String | string | any, message?: string): void;
+
+  notSame(expected: I_String | string | any, actual: I_String | string | any, message?: string): void;
 
   same(expected: I_String | string | any, actual: I_String | string | any, message?: string): void;
 
@@ -71,7 +71,7 @@ export interface I_AssertionContextResult extends I_Classifiable {
   getCount(): number;
 }
 
-export interface I_ComparisionNode extends I_ComparisionBaseEquals  {
+export interface I_ComparisionNode extends I_ComparisionBaseEquals {
   getAssertionCount(): number;
   hasChildInfo(): boolean;
   /** 
@@ -129,13 +129,29 @@ export interface I_ComparisionTypeInfo extends I_ComparisionBaseInfo {
   getExpectedType(): TypeName;
 }
 
+export interface I_RecursiveEqualsResult {
+
+  getAssertionCount(): number;
+
+  getComparisionNode(): I_ComparisionNode;
+  /**
+   * if this is true then they were equals
+   * if this is false they were notEquals
+   */
+  isSuccess(): boolean;
+}
+
+export interface I_RecursiveEqualsResultErrorFormmater {
+  format(result: I_RecursiveEqualsResult, message?: string): string;
+  toString(obj: I_String | string | any): string;
+}
 
 /**
  * represts something that has a equals method and a toString method
  * if these are misssing == and != are used for equality
  * and '' + yourObj are used for toString logic
  */
-export interface I_EquatableString extends I_Equatable, I_String {}
+export interface I_EquatableString extends I_Equatable, I_String { }
 
 /** 
  * @deprecated use I_FunctionFactory
@@ -196,7 +212,7 @@ export interface I_TestParams {
    * the test name
    */
   getName();
-  
+
   /** 
    * This is now the preferred way to run the test
    * and the lambda in the TestConstructor will be @depricated and eventually removed
